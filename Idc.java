@@ -3,7 +3,7 @@
  * "Identifiant de connexion" and belong to ONE account
  */
 
-public class Idc extends BasicComponent {
+public class Idc extends BasicComponent{
     private String value; // value of the idc
 
     public Idc(String label, String value){

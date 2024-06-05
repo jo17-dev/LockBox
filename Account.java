@@ -39,10 +39,10 @@ public class Account extends BasicComponent {
         }
     }
 
-    public void addIdc(Idc pIdc) throws BitLockerException{
+    public void addIdc(Idc pIdc) throws LockBoxException{
         for(Idc item: idcs){
             if(item.getLabel().equals(pIdc.getLabel().toLowerCase())){
-                throw new BitLockerException("L'identifiant de connxion "+ item.getLabel()+ " existe dejas" );
+                throw new LockBoxException("L'identifiant de connxion "+ item.getLabel()+ " existe dejas" );
             }
         }
         idcs.add(pIdc);
@@ -61,19 +61,19 @@ public class Account extends BasicComponent {
         }
     }
 
-    public void addTag(String pTag) throws BitLockerException{
+    public void addTag(String pTag) throws LockBoxException{
         if(tags.contains(pTag.toLowerCase())){
-            throw new BitLockerException("Le tag "+pTag+ " existe déjas pour ce compte");
+            throw new LockBoxException("Le tag "+pTag+ " existe déjas pour ce compte");
         }else{
             tags.add(pTag);
         }
     }
 
-    public void delTag(String pTag) throws BitLockerException{
+    public void delTag(String pTag) throws LockBoxException{
         if(tags.contains(pTag)){
             tags.remove(pTag);
         }else{
-            throw new BitLockerException("Le tag '"+pTag +"' n'est pas présent. vérifiez l'orthographe" );
+            throw new LockBoxException("Le tag '"+pTag +"' n'est pas présent. vérifiez l'orthographe" );
         }
     }
 

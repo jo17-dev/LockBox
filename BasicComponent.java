@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class BasicComponent {
+public class BasicComponent implements Serializable {
     private String label;
     private LocalDate createdDate;
     private LocalDate updatedDate;
