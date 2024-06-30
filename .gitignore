@@ -1,5 +1,7 @@
 .jo17-dev
 Tests.java
+Testv2.java
+Testv3.java
 *.png
 *.drawio
-Testv2.java
+*.docx

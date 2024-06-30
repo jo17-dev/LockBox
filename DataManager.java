@@ -34,8 +34,8 @@ public class DataManager {
 
             System.out.println(" ---------- Amorage du processus d'écriture --------");
             for(Account item : datas){
-                if(item.getLabel().equals(acc.getLabel())){ // if there is another accoun with the same lable, we just cancel it
-                    throw new IOException("Erreur de traitement: Le Ce compte existe déjas existe déjas");
+                if(item.getId() == acc.getId() || item.getLabel().toLowerCase() == acc.getLabel().toLowerCase()){ // if there is another account with the same label, we just cancel it
+                    throw new IOException("Erreur de traitement: Le Ce compte existe déjas:: " + item.getId() + " == " + acc.getId() );
                 }
             }
             datas.add(acc);
@@ -51,6 +51,44 @@ public class DataManager {
         return downloadDatasFromStream(datasFile);
     }
 
+    // mise a jour d'un compte:
+    public void updateAccount (int id, Account updatedAccount) throws LockBoxException{
+        int targetedIndex=-1;
+        for(Account item : datas){
+            targetedIndex++;
+            if(item.getId() == updatedAccount.getId() || item.getLabel().toLowerCase() == updatedAccount.getLabel().toLowerCase()){ // if there is another
+                break;
+            }
+        }
+        if(targetedIndex < datas.size()){
+            try{
+                datas.add(targetedIndex, updatedAccount);
+                datas.remove(targetedIndex+1);
+            }catch(IndexOutOfBoundsException e){
+                throw new LockBoxException("Erreur survenue l'ors de la mise à jour du compte données");
+            }
+        }else{
+            throw new LockBoxException("Impossible de mettre à jour vos données");
+        }
+    }
+
+    // supression d'un compte: mise a jour des données, supression et mise à jour 
+    public boolean deleteAccount(int id){
+        boolean result = false;
+        uploadDatasToStream(datasFile, datas);
+        datas = downloadDatasFromStream(datasFile);
+        for(Account item : datas){
+            if(item.getId() == id){
+                result = datas.remove(item);
+                break;
+            }
+        }
+        uploadDatasToStream(datasFile, datas);
+        datas = downloadDatasFromStream(datasFile);
+        return result;
+    }
+
+    // enregistrement des données dans les fichiers
     private static void uploadDatasToStream(File dbFile, ArrayList<Account> accounts){
         try{
            ObjectOutputStream datasWriter = new ObjectOutputStream(new FileOutputStream(dbFile));
@@ -63,6 +101,7 @@ public class DataManager {
         }
     }
 
+    // Récupération des données dans les fichiers
     private static ArrayList<Account> downloadDatasFromStream(File dbFile){
         try{
             ArrayList<Account> result = new ArrayList<Account>();
