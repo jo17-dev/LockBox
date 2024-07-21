@@ -22,7 +22,7 @@ public class DataManager {
 
         datas = downloadDatasFromStream(datasFile);
 
-        // check if the file exists
+        // check if the datas file exists
         if(!datasFile.isFile() || !datasFile.exists()){
             datasFile.createNewFile(); // ioexception
         }

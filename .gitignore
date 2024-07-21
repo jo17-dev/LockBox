@@ -1,7 +1,12 @@
 .jo17-dev
+.log
+Log.java
+RSALock.java
+SerialazableRSAKey.java
 Tests.java
 Testv2.java
 Testv3.java
 *.png
 *.drawio
 *.docx
+*.class
