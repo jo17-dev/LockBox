@@ -2,6 +2,7 @@
  * class for managing datasFile
  */
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -48,7 +49,14 @@ public class DataManager {
 
     // Lecture des données d'un compte
     public ArrayList<Account> getAccounts (){
-        return downloadDatasFromStream(datasFile);
+        this.datas = downloadDatasFromStream(datasFile);
+        return this.datas;
+    }
+
+    // remplacement de la totalité de comptes
+    public void setAccounts(ArrayList<Account> target) throws LockBoxException{
+        this.datas = target;
+        uploadDatasToStream(datasFile, datas);
     }
 
     // mise a jour d'un compte:
@@ -103,24 +111,29 @@ public class DataManager {
 
     // Récupération des données dans les fichiers
     private static ArrayList<Account> downloadDatasFromStream(File dbFile){
+        ObjectInputStream datasReader;
         try{
             ArrayList<Account> result = new ArrayList<Account>();
-            ObjectInputStream datasReader = new ObjectInputStream(new FileInputStream(dbFile));
+            datasReader = new ObjectInputStream(new FileInputStream(dbFile));
             while (true) {
                 try{
                     result.add(
                         (Account) datasReader.readObject()
                     );
-                }catch(Exception exception){
+                }catch(EOFException exception){
+                    datasReader.close();
                     break;
                 }
             }
             datasReader.close();
             return result;
         }catch(Exception e){
-            
             System.out.println("Downloading falied");
         }
         return new ArrayList<Account>();
+    }
+
+    public void saveAndDisconect(){
+        uploadDatasToStream(datasFile, datas);
     }
 }
